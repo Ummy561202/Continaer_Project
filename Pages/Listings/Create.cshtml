@@ -1,0 +1,82 @@
+@page
+@model Continaer_Project.Pages.Listings.CreateModel
+@{
+    ViewData["Title"] = "List a property";
+}
+
+<h1 class="h3 mb-3">List a property</h1>
+
+<form method="post" class="card card-body shadow-sm">
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+    <div class="row g-3">
+        <div class="col-12">
+            <label asp-for="Input.Title" class="form-label"></label>
+            <input asp-for="Input.Title" class="form-control" />
+            <span asp-validation-for="Input.Title" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-6">
+            <label asp-for="Input.ListingType" class="form-label"></label>
+            <select asp-for="Input.ListingType" asp-items="Html.GetEnumSelectList<ListingType>()" class="form-select"></select>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="Input.PropertyType" class="form-label"></label>
+            <select asp-for="Input.PropertyType" asp-items="Html.GetEnumSelectList<PropertyType>()" class="form-select"></select>
+        </div>
+
+        <div class="col-md-8">
+            <label asp-for="Input.Address" class="form-label"></label>
+            <input asp-for="Input.Address" class="form-control" />
+            <span asp-validation-for="Input.Address" class="text-danger"></span>
+        </div>
+        <div class="col-md-4">
+            <label asp-for="Input.City" class="form-label"></label>
+            <input asp-for="Input.City" class="form-control" />
+            <span asp-validation-for="Input.City" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-6">
+            <label asp-for="Input.Price" class="form-label"></label>
+            <input asp-for="Input.Price" type="number" min="1" class="form-control" />
+            <span asp-validation-for="Input.Price" class="text-danger"></span>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="Input.AreaSqFt" class="form-label"></label>
+            <input asp-for="Input.AreaSqFt" type="number" min="1" class="form-control" />
+            <span asp-validation-for="Input.AreaSqFt" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-6">
+            <label asp-for="Input.Bedrooms" class="form-label"></label>
+            <input asp-for="Input.Bedrooms" type="number" min="0" class="form-control" />
+            <span asp-validation-for="Input.Bedrooms" class="text-danger"></span>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="Input.Bathrooms" class="form-label"></label>
+            <input asp-for="Input.Bathrooms" type="number" min="0" class="form-control" />
+            <span asp-validation-for="Input.Bathrooms" class="text-danger"></span>
+        </div>
+
+        <div class="col-12">
+            <label asp-for="Input.Description" class="form-label"></label>
+            <textarea asp-for="Input.Description" rows="6" class="form-control"></textarea>
+            <span asp-validation-for="Input.Description" class="text-danger"></span>
+        </div>
+
+        <div class="col-12">
+            <label asp-for="Input.ImageUrl" class="form-label"></label>
+            <input asp-for="Input.ImageUrl" class="form-control" placeholder="https://..." />
+            <span asp-validation-for="Input.ImageUrl" class="text-danger"></span>
+        </div>
+
+        <div class="col-12">
+            <button type="submit" class="btn btn-primary">Publish listing</button>
+            <a class="btn btn-outline-secondary" asp-page="/Index">Cancel</a>
+        </div>
+    </div>
+</form>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

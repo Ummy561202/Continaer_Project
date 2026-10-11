@@ -1,0 +1,33 @@
+@page
+@model InquiriesModel
+@{
+    ViewData["Title"] = "Inquiries";
+}
+
+<h1 class="h3 mb-3">Inquiries <span class="badge text-bg-warning align-middle fs-6">Development only</span></h1>
+
+@if (Model.Inquiries.Count == 0)
+{
+    <div class="alert alert-info">No inquiries yet.</div>
+}
+else
+{
+    <div class="table-responsive">
+        <table class="table table-striped align-middle">
+            <thead>
+                <tr><th>Received (UTC)</th><th>Property</th><th>From</th><th>Message</th></tr>
+            </thead>
+            <tbody>
+                @foreach (var i in Model.Inquiries)
+                {
+                    <tr>
+                        <td>@i.CreatedUtc.ToString("yyyy-MM-dd HH:mm")</td>
+                        <td><a asp-page="/Listings/Details" asp-route-id="@i.PropertyId">@i.PropertyTitle</a></td>
+                        <td>@i.Name<br /><small class="text-muted">@i.Email @i.Phone</small></td>
+                        <td class="description">@i.Message</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}

@@ -1,0 +1,14 @@
+@model Property
+@{
+    var placeholderClass = "ph-" + Model.PropertyType.ToString().ToLowerInvariant();
+}
+@if (!string.IsNullOrWhiteSpace(Model.ImageUrl))
+{
+    <img src="@Model.ImageUrl" alt="@Model.Title" class="property-img" loading="lazy" />
+}
+else
+{
+    <div class="property-img property-placeholder @placeholderClass" role="img" aria-label="No photo for this @Model.PropertyType">
+        <span>@Model.PropertyType</span>
+    </div>
+}

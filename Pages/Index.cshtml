@@ -1,10 +1,88 @@
-﻿@page
+@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Find your next home";
 }
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-</div>
+<section class="hero rounded-4 p-4 p-md-5 mb-5">
+    <h1 class="display-5 fw-bold">Find a home you will love</h1>
+    <p class="lead mb-4">Browse apartments, villas, plots and commercial spaces for sale or rent.</p>
+
+    <form method="get" asp-page="/Listings/Index" class="row g-2 hero-search">
+        <div class="col-12 col-md-4">
+            <input type="text" name="Q" class="form-control form-control-lg"
+                   placeholder="Locality, project or keyword" aria-label="Search" />
+        </div>
+        <div class="col-6 col-md-2">
+            <select name="Listing" class="form-select form-select-lg" aria-label="Buy or rent">
+                <option value="">Buy or rent</option>
+                <option value="Sale">Buy</option>
+                <option value="Rent">Rent</option>
+            </select>
+        </div>
+        <div class="col-6 col-md-2">
+            <select name="City" class="form-select form-select-lg" aria-label="City">
+                <option value="">All cities</option>
+                @foreach (var city in Model.Cities)
+                {
+                    <option value="@city">@city</option>
+                }
+            </select>
+        </div>
+        <div class="col-6 col-md-2">
+            <select name="Kind" class="form-select form-select-lg" aria-label="Property type">
+                <option value="">Any type</option>
+                @foreach (var kind in Enum.GetValues<PropertyType>())
+                {
+                    <option value="@kind">@kind</option>
+                }
+            </select>
+        </div>
+        <div class="col-6 col-md-2">
+            <button type="submit" class="btn btn-warning btn-lg w-100">Search</button>
+        </div>
+    </form>
+</section>
+
+<section class="row g-3 mb-5 text-center">
+    <div class="col-4">
+        <div class="stat p-3 bg-white rounded-3 shadow-sm">
+            <div class="fs-2 fw-bold">@Model.Stats.Total</div>
+            <div class="text-muted">Properties</div>
+        </div>
+    </div>
+    <div class="col-4">
+        <div class="stat p-3 bg-white rounded-3 shadow-sm">
+            <div class="fs-2 fw-bold">@Model.Stats.ForSale</div>
+            <div class="text-muted">For sale</div>
+        </div>
+    </div>
+    <div class="col-4">
+        <div class="stat p-3 bg-white rounded-3 shadow-sm">
+            <div class="fs-2 fw-bold">@Model.Stats.ForRent</div>
+            <div class="text-muted">For rent</div>
+        </div>
+    </div>
+</section>
+
+<section>
+    <div class="d-flex justify-content-between align-items-end mb-3">
+        <h2 class="h3 mb-0">Featured properties</h2>
+        <a asp-page="/Listings/Index">View all</a>
+    </div>
+
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        @foreach (var property in Model.Featured)
+        {
+            <div class="col">
+                <partial name="_PropertyCard" model="property" />
+            </div>
+        }
+    </div>
+</section>
+
+<section class="cta rounded-4 p-4 p-md-5 mt-5 text-center">
+    <h2 class="h3">Have a property to sell or rent?</h2>
+    <p class="mb-3">Post your listing in a minute and let buyers and tenants contact you directly.</p>
+    <a class="btn btn-primary btn-lg" asp-page="/Listings/Create">List a property</a>
+</section>

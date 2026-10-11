@@ -1,52 +1,59 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - Continaer_Project</title>
-    <script type="importmap"></script>
+    <title>@ViewData["Title"] - HomeNest</title>
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
-    <link rel="stylesheet" href="~/Continaer_Project.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/realestate.css" asp-append-version="true" />
 </head>
 <body>
     <header>
-        <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+        <nav class="navbar navbar-expand-md navbar-dark bg-dark">
             <div class="container">
-                <a class="navbar-brand" asp-area="" asp-page="/Index">Continaer_Project</a>
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target=".navbar-collapse" aria-controls="navbarSupportedContent"
-                        aria-expanded="false" aria-label="Toggle navigation">
+                <a class="navbar-brand" asp-page="/Index">HomeNest</a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#mainNav"
+                        aria-controls="mainNav" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
-                <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
-                    <ul class="navbar-nav flex-grow-1">
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Index">Home</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-page="/Privacy">Privacy</a>
-                        </li>
+                <div class="collapse navbar-collapse" id="mainNav">
+                    <ul class="navbar-nav me-auto">
+                        <li class="nav-item"><a class="nav-link" asp-page="/Index">Home</a></li>
+                        <li class="nav-item"><a class="nav-link" asp-page="/Listings/Index">Browse</a></li>
+                        <li class="nav-item"><a class="nav-link" asp-page="/Listings/Index" asp-route-Listing="Sale">Buy</a></li>
+                        <li class="nav-item"><a class="nav-link" asp-page="/Listings/Index" asp-route-Listing="Rent">Rent</a></li>
+                        <environment include="Development">
+                            <li class="nav-item"><a class="nav-link" asp-page="/Inquiries">Inquiries</a></li>
+                        </environment>
                     </ul>
+                    <a class="btn btn-warning" asp-page="/Listings/Create">List a property</a>
                 </div>
             </div>
         </nav>
     </header>
-    <div class="container">
-        <main role="main" class="pb-3">
-            @RenderBody()
-        </main>
-    </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2026 - Continaer_Project - <a asp-area="" asp-page="/Privacy">Privacy</a>
+    <main class="container py-4" role="main">
+        @if (TempData["StatusMessage"] is string status)
+        {
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                @status
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+
+        @RenderBody()
+    </main>
+
+    <footer class="border-top py-4 mt-5 text-muted">
+        <div class="container d-flex flex-wrap justify-content-between gap-2">
+            <span>&copy; @DateTime.Now.Year HomeNest. Sample real estate application.</span>
+            <span>Listings shown are demo data.</span>
         </div>
     </footer>
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
-
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

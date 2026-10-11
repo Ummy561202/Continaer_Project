@@ -1,26 +1,26 @@
+using Continaer_Project.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddRazorPages();
+
+// One shared in-memory store for the whole app. Swap this line for an EF Core
+// implementation of IPropertyService when you want data to survive restarts.
+builder.Services.AddSingleton<IPropertyService, InMemoryPropertyService>();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error");
-    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
     app.UseHsts();
 }
 
 app.UseHttpsRedirection();
-
 app.UseRouting();
-
 app.UseAuthorization();
 
 app.MapStaticAssets();
-app.MapRazorPages()
-   .WithStaticAssets();
+app.MapRazorPages().WithStaticAssets();
 
 app.Run();

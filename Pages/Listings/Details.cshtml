@@ -1,0 +1,98 @@
+@page "{id:int}"
+@model Continaer_Project.Pages.Listings.DetailsModel
+@{
+    var p = Model.Property;
+    ViewData["Title"] = p.Title;
+}
+
+<nav aria-label="breadcrumb">
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a asp-page="/Index">Home</a></li>
+        <li class="breadcrumb-item"><a asp-page="/Listings/Index">Browse</a></li>
+        <li class="breadcrumb-item active" aria-current="page">@p.Title</li>
+    </ol>
+</nav>
+
+<div class="row g-4">
+    <div class="col-lg-8">
+        <div class="details-image rounded-3 overflow-hidden mb-3">
+            <partial name="_PropertyImage" model="p" />
+        </div>
+
+        <div class="d-flex flex-wrap justify-content-between align-items-start gap-2">
+            <div>
+                <span class="badge @(p.ListingType == ListingType.Sale ? "text-bg-primary" : "text-bg-success")">For @p.ListingType</span>
+                <span class="badge text-bg-secondary">@p.PropertyType</span>
+                <h1 class="h3 mt-2 mb-1">@p.Title</h1>
+                <div class="text-muted">@p.Address, @p.City</div>
+            </div>
+            <div class="text-end">
+                <div class="price fs-3">@p.DisplayPrice()</div>
+                @if (p.ListingType == ListingType.Sale)
+                {
+                    <div class="text-muted small">@p.PricePerSqFt()</div>
+                }
+            </div>
+        </div>
+
+        <div class="row text-center g-2 my-3">
+            <div class="col-4"><div class="stat p-3 bg-white rounded-3 shadow-sm"><div class="fw-bold">@p.Bedrooms</div><div class="text-muted small">Bedrooms</div></div></div>
+            <div class="col-4"><div class="stat p-3 bg-white rounded-3 shadow-sm"><div class="fw-bold">@p.Bathrooms</div><div class="text-muted small">Bathrooms</div></div></div>
+            <div class="col-4"><div class="stat p-3 bg-white rounded-3 shadow-sm"><div class="fw-bold">@p.AreaSqFt.ToString("N0")</div><div class="text-muted small">Sq ft</div></div></div>
+        </div>
+
+        <h2 class="h5">About this property</h2>
+        <p class="description">@p.Description</p>
+    </div>
+
+    <div class="col-lg-4">
+        <div class="card shadow-sm">
+            <div class="card-body">
+                <h2 class="h5">Contact the owner</h2>
+                <form method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <div class="mb-3">
+                        <label asp-for="Input.Name" class="form-label"></label>
+                        <input asp-for="Input.Name" class="form-control" />
+                        <span asp-validation-for="Input.Name" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Input.Email" class="form-label"></label>
+                        <input asp-for="Input.Email" class="form-control" />
+                        <span asp-validation-for="Input.Email" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Input.Phone" class="form-label"></label>
+                        <input asp-for="Input.Phone" class="form-control" />
+                        <span asp-validation-for="Input.Phone" class="text-danger"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Input.Message" class="form-label"></label>
+                        <textarea asp-for="Input.Message" rows="4" class="form-control"></textarea>
+                        <span asp-validation-for="Input.Message" class="text-danger"></span>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Send inquiry</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+@if (Model.Similar.Count > 0)
+{
+    <section class="mt-5">
+        <h2 class="h4 mb-3">Similar properties</h2>
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+            @foreach (var s in Model.Similar)
+            {
+                <div class="col">
+                    <partial name="_PropertyCard" model="s" />
+                </div>
+            }
+        </div>
+    </section>
+}
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

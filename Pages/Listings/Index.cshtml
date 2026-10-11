@@ -1,0 +1,121 @@
+@page
+@model Continaer_Project.Pages.Listings.IndexModel
+@{
+    ViewData["Title"] = "Browse properties";
+    var result = Model.Result;
+}
+
+<h1 class="h3 mb-3">Browse properties</h1>
+
+<form method="get" class="card card-body shadow-sm mb-4">
+    <div class="row g-2 align-items-end">
+        <div class="col-12 col-lg-4">
+            <label for="Q" class="form-label">Search</label>
+            <input asp-for="Q" class="form-control" placeholder="Locality, project or keyword" />
+        </div>
+        <div class="col-6 col-lg-2">
+            <label for="Listing" class="form-label">Buy or rent</label>
+            <select asp-for="Listing" class="form-select">
+                <option value="">Any</option>
+                <option value="Sale">Buy</option>
+                <option value="Rent">Rent</option>
+            </select>
+        </div>
+        <div class="col-6 col-lg-3">
+            <label for="City" class="form-label">City</label>
+            <select asp-for="City" class="form-select">
+                <option value="">All cities</option>
+                @foreach (var city in Model.Cities)
+                {
+                    <option value="@city">@city</option>
+                }
+            </select>
+        </div>
+        <div class="col-6 col-lg-3">
+            <label for="Kind" class="form-label">Property type</label>
+            <select asp-for="Kind" class="form-select">
+                <option value="">Any type</option>
+                @foreach (var kind in Enum.GetValues<PropertyType>())
+                {
+                    <option value="@kind">@kind</option>
+                }
+            </select>
+        </div>
+        <div class="col-6 col-lg-3">
+            <label for="MinPrice" class="form-label">Min price (₹)</label>
+            <input asp-for="MinPrice" type="number" min="0" class="form-control" placeholder="No minimum" />
+        </div>
+        <div class="col-6 col-lg-3">
+            <label for="MaxPrice" class="form-label">Max price (₹)</label>
+            <input asp-for="MaxPrice" type="number" min="0" class="form-control" placeholder="No maximum" />
+        </div>
+        <div class="col-6 col-lg-2">
+            <label for="Beds" class="form-label">Bedrooms</label>
+            <select asp-for="Beds" class="form-select">
+                <option value="">Any</option>
+                @for (var b = 1; b <= 5; b++)
+                {
+                    <option value="@b">@b+</option>
+                }
+            </select>
+        </div>
+        <div class="col-6 col-lg-2">
+            <label for="Sort" class="form-label">Sort by</label>
+            <select asp-for="Sort" class="form-select">
+                <option value="newest">Newest</option>
+                <option value="price_asc">Price: low to high</option>
+                <option value="price_desc">Price: high to low</option>
+                <option value="area_desc">Largest area</option>
+            </select>
+        </div>
+        <div class="col-6 col-lg-2">
+            <button type="submit" class="btn btn-primary w-100">Apply</button>
+        </div>
+        <div class="col-6 col-lg-2">
+            <a class="btn btn-outline-secondary w-100" asp-page="/Listings/Index">Clear</a>
+        </div>
+    </div>
+</form>
+
+<p class="text-muted">
+    @result.TotalCount @(result.TotalCount == 1 ? "property" : "properties") found
+</p>
+
+@if (result.Items.Count == 0)
+{
+    <div class="alert alert-info">No properties match your filters. Try widening the price range or clearing a filter.</div>
+}
+else
+{
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-3 g-4">
+        @foreach (var property in result.Items)
+        {
+            <div class="col">
+                <partial name="_PropertyCard" model="property" />
+            </div>
+        }
+    </div>
+}
+
+@if (result.TotalPages > 1)
+{
+    var first = Math.Max(1, result.PageNumber - 2);
+    var last = Math.Min(result.TotalPages, result.PageNumber + 2);
+
+    <nav aria-label="Pages" class="mt-4">
+        <ul class="pagination justify-content-center">
+            <li class="page-item @(result.PageNumber == 1 ? "disabled" : "")">
+                <a class="page-link" asp-page="/Listings/Index" asp-all-route-data="@Model.PageRoute(result.PageNumber - 1)">Previous</a>
+            </li>
+            @for (var i = first; i <= last; i++)
+            {
+                <li class="page-item @(i == result.PageNumber ? "active" : "")">
+                    <a class="page-link" asp-page="/Listings/Index" asp-all-route-data="@Model.PageRoute(i)">@i</a>
+                </li>
+            }
+            <li class="page-item @(result.PageNumber == result.TotalPages ? "disabled" : "")">
+                <a class="page-link" asp-page="/Listings/Index" asp-all-route-data="@Model.PageRoute(result.PageNumber + 1)">Next</a>
+            </li>
+        </ul>
+    </nav>
+}
