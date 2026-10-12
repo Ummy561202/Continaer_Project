@@ -8,22 +8,22 @@ variables:
   buildConfiguration: 'Release'
 
 steps:
-- script: dotnet build --configuration $(buildConfiguration)
-  displayName: 'dotnet build $(buildConfiguration)'
-
-- task: CopyFiles@2
-  displayName: 'Copy source and Dockerfile'
+- task: UseDotNet@2
+  displayName: 'Install .NET SDK'
   inputs:
-    SourceFolder: '$(Build.SourcesDirectory)'
-    Contents: |
-      **
-      !**/bin/**
-      !**/obj/**
-      !**/.git/**
-    TargetFolder: '$(Build.ArtifactStagingDirectory)'
+    packageType: 'sdk'
+    version: '10.x'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Publish web app as zip'
+  inputs:
+    command: 'publish'
+    publishWebProjects: true
+    arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)/webapp'
+    zipAfterPublish: true
 
 - task: PublishBuildArtifacts@1
-  displayName: 'Publish artifact'
+  displayName: 'Publish zip artifact'
   inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)'
+    PathtoPublish: '$(Build.ArtifactStagingDirectory)/webapp'
     ArtifactName: 'drop'
