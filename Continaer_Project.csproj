@@ -8,9 +8,12 @@
     <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
     <IsPackable>true</IsPackable>
     <DockerfileContext>.</DockerfileContext>
+    <ApplicationInsightsResourceId>/subscriptions/0acf074e-4e56-4f10-bfed-754dea0c1cc6/resourcegroups/MyRG/providers/microsoft.insights/components/ContinaerProject</ApplicationInsightsResourceId>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Azure.Identity" Version="1.21.0" />
+    <PackageReference Include="Microsoft.ApplicationInsights.AspNetCore" Version="3.1.2" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="10.0.12">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
