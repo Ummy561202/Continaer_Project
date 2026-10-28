@@ -15,15 +15,33 @@ steps:
     version: '10.x'
 
 - task: DotNetCoreCLI@2
+  displayName: 'Restore'
+  inputs:
+    command: 'restore'
+    projects: '**/*.csproj'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Build'
+  inputs:
+    command: 'build'
+    projects: '**/*.csproj'
+    arguments: '--configuration $(buildConfiguration) --no-restore'
+
+- task: AdvancedSecurity-Dependency-Scanning@1
+  displayName: 'Dependency scanning'
+
+- task: DotNetCoreCLI@2
   displayName: 'Publish web app as zip'
   inputs:
     command: 'publish'
     publishWebProjects: true
-    arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)/webapp'
+    projects: ''
+    arguments: '--configuration $(buildConfiguration) --no-build --output $(Build.ArtifactStagingDirectory)/webapp'
     zipAfterPublish: true
 
-- task: PublishBuildArtifacts@1
+- task: PublishPipelineArtifact@1
   displayName: 'Publish zip artifact'
   inputs:
-    PathtoPublish: '$(Build.ArtifactStagingDirectory)/webapp'
-    ArtifactName: 'drop'
+    targetPath: '$(Build.ArtifactStagingDirectory)/webapp'
+    artifact: 'drop'
+    publishLocation: 'pipeline'
